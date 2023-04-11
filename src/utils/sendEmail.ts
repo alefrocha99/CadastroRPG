@@ -71,7 +71,7 @@ export const sendWelcomeEmail = async (to: string) => {
         <p>Seja bem-vindo(a) ao nosso site de RPG de mesa! Esperamos que você encontre aqui as melhores aventuras e faça muitos amigos!</p>
         <p>Estamos sempre atualizando o nosso conteúdo e adicionando novidades. Fique atento(a) às nossas notícias e novidades!</p>
         <p>Aproveite ao máximo a sua experiência em nosso site!</p>
-        <a href="#" class="button">Comece já a jogar!</a>
+        <a href="http://127.0.0.1:5500/index.html" class="button">Comece já a jogar!</a>
       </div>
     </body>
     </html>

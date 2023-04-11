@@ -3,11 +3,6 @@ import { connectDB } from '../database/index';
 import { sendDiscordWebHook } from '../utils/discordHook';
 import { sendWelcomeEmail } from '../utils/sendEmail';
 
-
-
-
-
-
 export const usersRouter = express.Router();
 
 
@@ -41,7 +36,11 @@ usersRouter.post('/users', async (req, res) => {
      res.status(201).json({ message: 'Usuário criado com Sucesso', user });
    } catch (err) {
      console.error(err);
-     res.status(500).json({ message: 'Erro do servidor interno!' });
+     if(err.code === 'SQLITE_CONSTRAINT' && err.message.includes('UNIQUE constraint failed: users.email')){
+      res.status(400).json({message: 'Este endereço de email já está em uso'})
+     }else{
+      res.status(500).json({ message: 'Erro do servidor interno!' });
+     }
     
     }
      
@@ -55,9 +54,10 @@ usersRouter.post('/users', async (req, res) => {
     const db = await connectDB();
   
     try {
+      const personSkillsString = JSON.stringify(personSkills);
       const result = await db.run(`INSERT INTO person(personName, personAge, personClass, personStr, personCon, personCha, personWis, personInt, personDex, personMaxPV, personSkills, userId) 
                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                                    [personName, personAge, personClass, personStr, personCon, personCha, personWis, personInt, personDex, personMaxPV, personSkills, userId]);
+                                    [personName, personAge, personClass, personStr, personCon, personCha, personWis, personInt, personDex, personMaxPV, personSkillsString, userId]);
   
       const personId = result.lastID;
   
@@ -65,7 +65,7 @@ usersRouter.post('/users', async (req, res) => {
   
     } catch (error) {
       console.error(error);
-      res.status(500).send('Error creating person');
+      res.status(500).send('Erro ao criar um personagem');
     }
   });
 
@@ -130,4 +130,19 @@ usersRouter.post('/users', async (req, res) => {
       res.status(500).send('Error clearing database');
     }
   });
+
+
+  usersRouter.delete('/users/:id/persons', async (req, res) => {
+    const db = await connectDB();
+    const { id } = req.params;
+    try {
+      await db.run('DELETE FROM person where id = ?', id);
+      res.status(204).send();
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Erro ao deleter o personagem');
+    }
+  });
+
+
 
