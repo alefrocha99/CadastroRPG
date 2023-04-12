@@ -2,6 +2,7 @@ import express from 'express';
 import { connectDB } from '../database/index';
 import { sendDiscordWebHook } from '../utils/discordHook';
 import { sendWelcomeEmail } from '../utils/sendEmail';
+import bcrypt from 'bcrypt';
 
 export const usersRouter = express.Router();
 
@@ -143,6 +144,60 @@ usersRouter.post('/users', async (req, res) => {
       res.status(500).send('Erro ao deleter o personagem');
     }
   });
+
+
+  usersRouter.post('/createPassword', async (req, res) => {
+    const db = await connectDB();
+    const { email, password } = req.body;
+  
+    // Obter o ID do usuário com base no email fornecido
+    const user = await db.get(`SELECT id FROM users WHERE email = $1`, [email]);
+  
+    // Criar um hash de senha usando bcrypt.hash()
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash(password, saltRounds);
+  
+    // Inserir o hash de senha na tabela userAuthentication, juntamente com o ID do usuário
+    await db.run(`INSERT INTO userAuthentication (userID, password) VALUES ($1, $2)`, [user.id, passwordHash]);
+  
+    res.send('Senha criada com sucesso!');
+  });
+
+
+
+  usersRouter.post('/userAuthentication/', async (req, res) => {
+    const db = await connectDB();
+    const { email, password } = req.body;
+  
+    try {
+      // Busca o usuário com base no e-mail fornecido
+      const user = await db.get('SELECT * FROM users WHERE email = ?', [email]);
+  
+      if (!user) {
+        return res.status(401).send('Usuário não encontrado');
+      }
+  
+      // Busca a senha armazenada do usuário na tabela userAuthentication
+      const authInfo = await db.get('SELECT * FROM userAuthentication WHERE userid = ?', [user.id]);
+  
+      if (!authInfo) {
+        return res.status(401).send('Usuário não encontrado');
+      }
+  
+      // Compara a senha inserida pelo usuário com a senha armazenada usando bcrypt.compare()
+      const isMatch = await bcrypt.compare(password, authInfo.password);
+  
+      if (!isMatch) {
+        return res.status(401).json({ message: 'Senha incorreta' });
+      }
+  
+      return res.status(200).json({ message: 'Autenticação bem sucedida' });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Erro interno do servidor' });
+    }
+  });
+
 
 
 

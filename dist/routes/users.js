@@ -8,6 +8,7 @@ const express_1 = __importDefault(require("express"));
 const index_1 = require("../database/index");
 const discordHook_1 = require("../utils/discordHook");
 const sendEmail_1 = require("../utils/sendEmail");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 exports.usersRouter = express_1.default.Router();
 // rota para criar usuários
 exports.usersRouter.post('/users', async (req, res) => {
@@ -117,6 +118,44 @@ exports.usersRouter.delete('/users/:id/persons', async (req, res) => {
     catch (error) {
         console.error(error);
         res.status(500).send('Erro ao deleter o personagem');
+    }
+});
+exports.usersRouter.post('/createPassword', async (req, res) => {
+    const db = await (0, index_1.connectDB)();
+    const { email, password } = req.body;
+    // Obter o ID do usuário com base no email fornecido
+    const user = await db.get(`SELECT id FROM users WHERE email = $1`, [email]);
+    // Criar um hash de senha usando bcrypt.hash()
+    const saltRounds = 10;
+    const passwordHash = await bcrypt_1.default.hash(password, saltRounds);
+    // Inserir o hash de senha na tabela userAuthentication, juntamente com o ID do usuário
+    await db.run(`INSERT INTO userAuthentication (userID, password) VALUES ($1, $2)`, [user.id, passwordHash]);
+    res.send('Senha criada com sucesso!');
+});
+exports.usersRouter.post('/userAuthentication/', async (req, res) => {
+    const db = await (0, index_1.connectDB)();
+    const { email, password } = req.body;
+    try {
+        // Busca o usuário com base no e-mail fornecido
+        const user = await db.get('SELECT * FROM users WHERE email = ?', [email]);
+        if (!user) {
+            return res.status(401).send('Usuário não encontrado');
+        }
+        // Busca a senha armazenada do usuário na tabela userAuthentication
+        const authInfo = await db.get('SELECT * FROM userAuthentication WHERE userid = ?', [user.id]);
+        if (!authInfo) {
+            return res.status(401).send('Usuário não encontrado');
+        }
+        // Compara a senha inserida pelo usuário com a senha armazenada usando bcrypt.compare()
+        const isMatch = await bcrypt_1.default.compare(password, authInfo.password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Senha incorreta' });
+        }
+        return res.status(200).json({ message: 'Autenticação bem sucedida' });
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Erro interno do servidor' });
     }
 });
 //# sourceMappingURL=users.js.map

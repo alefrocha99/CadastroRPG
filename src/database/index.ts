@@ -22,6 +22,15 @@ export async function connectDB() {
         FOREIGN KEY (personId) REFERENCES person(id)
       )
     `);
+
+    await db.exec(`
+      CREATE TABLE IF NOT EXISTS userAuthentication (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        password TEXT NOT NULL,
+        userId INTEGER NOT NULL,
+        FOREIGN KEY (userID) REFERENCES users (id)
+      )    
+    `)
   
     await db.exec(`
       CREATE TABLE IF NOT EXISTS person (

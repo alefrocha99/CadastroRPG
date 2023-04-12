@@ -21,4 +21,5 @@ app.use('/users', users_1.usersRouter);
 app.use('/:id/persons', users_1.usersRouter);
 app.use('/clear', users_1.usersRouter);
 app.use('/users/:id/persons', users_1.usersRouter);
+app.use('/userAuthentication/', users_1.usersRouter);
 //# sourceMappingURL=server.js.map
