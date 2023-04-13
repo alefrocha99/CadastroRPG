@@ -8,12 +8,15 @@ const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 const users_1 = require("../routes/users");
+const corsOptions = {
+    origin: 'http://127.0.0.1:5500'
+};
 const app = (0, express_1.default)();
 exports.app = app;
 const port = 3000;
 exports.port = port;
 app.use(body_parser_1.default.json());
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)(corsOptions));
 app.get('/', (_, res) => {
     res.send('Hello World!');
 });

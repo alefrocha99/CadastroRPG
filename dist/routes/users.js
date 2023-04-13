@@ -10,6 +10,11 @@ const discordHook_1 = require("../utils/discordHook");
 const sendEmail_1 = require("../utils/sendEmail");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 exports.usersRouter = express_1.default.Router();
+exports.usersRouter.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
 // rota para criar usuários
 exports.usersRouter.post('/users', async (req, res) => {
     try {

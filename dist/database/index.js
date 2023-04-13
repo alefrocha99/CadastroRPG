@@ -16,7 +16,7 @@ async function connectDB() {
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
-        email TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
         phone TEXT NOT NULL,
         gender TEXT NOT NULL,
         country TEXT NOT NULL,
@@ -24,6 +24,7 @@ async function connectDB() {
         FOREIGN KEY (personId) REFERENCES person(id)
       )
     `);
+    await db.exec(` CREATE INDEX IF NOT EXISTS email_index ON users(email);`);
     await db.exec(`
       CREATE TABLE IF NOT EXISTS userAuthentication (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
