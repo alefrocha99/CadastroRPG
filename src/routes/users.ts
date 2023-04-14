@@ -12,7 +12,7 @@ usersRouter.use((req, res, next) => {
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
-
+  
 
 // rota para criar usuários
 usersRouter.post('/users', async (req, res) => {
