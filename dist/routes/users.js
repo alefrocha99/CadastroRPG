@@ -128,14 +128,32 @@ exports.usersRouter.delete('/users/:id/persons', async (req, res) => {
 exports.usersRouter.post('/createPassword', async (req, res) => {
     const db = await (0, index_1.connectDB)();
     const { email, password } = req.body;
-    // Obter o ID do usuário com base no email fornecido
-    const user = await db.get(`SELECT id FROM users WHERE email = $1`, [email]);
-    // Criar um hash de senha usando bcrypt.hash()
-    const saltRounds = 10;
-    const passwordHash = await bcrypt_1.default.hash(password, saltRounds);
-    // Inserir o hash de senha na tabela userAuthentication, juntamente com o ID do usuário
-    await db.run(`INSERT INTO userAuthentication (userID, password) VALUES ($1, $2)`, [user.id, passwordHash]);
-    res.send('Senha criada com sucesso!');
+    const resultado = await db.get(`SELECT password FROM users LEFT JOIN userAuthentication ON userAuthentication.userid = users.id WHERE email = $1`, [email]);
+    if (resultado.password === null) {
+        // Obter o ID do usuário com base no email fornecido
+        const user = await db.get(`SELECT id FROM users WHERE email = $1`, [email]);
+        // Criar um hash de senha usando bcrypt.hash()
+        const saltRounds = 10;
+        const passwordHash = await bcrypt_1.default.hash(password, saltRounds);
+        // Inserir o hash de senha na tabela userAuthentication, juntamente com o ID do usuário
+        await db.run(`INSERT INTO userAuthentication (userID, password) VALUES ($1, $2)`, [user.id, passwordHash]);
+        res.send('Senha criada com sucesso!');
+    }
+    else {
+        res.status(400).send("O usuário já possui senha cadastrada.");
+    }
+});
+exports.usersRouter.post('/resetPassword', async (req, res) => {
+    const db = await (0, index_1.connectDB)();
+    const { email } = req.body;
+    const resultado = await db.get(`SELECT userAuthentication.password, users.email FROM users LEFT JOIN userAuthentication ON userAuthentication.userid = users.id WHERE email = $1`, [email]);
+    console.log(resultado);
+    if (resultado === '' || resultado.password === null) {
+        res.send('IF!');
+    }
+    else {
+        res.status(400).send("else");
+    }
 });
 exports.usersRouter.post('/userAuthentication/', async (req, res) => {
     const db = await (0, index_1.connectDB)();

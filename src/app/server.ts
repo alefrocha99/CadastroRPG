@@ -22,6 +22,7 @@ app.use('/:id/persons', usersRouter);
 app.use('/clear', usersRouter);
 app.use('/users/:id/persons', usersRouter);
 app.use('/userAuthentication/', usersRouter);
+app.use('/resetPassword',usersRouter);
 
 
 
