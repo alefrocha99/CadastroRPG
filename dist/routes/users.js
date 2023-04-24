@@ -148,12 +148,6 @@ exports.usersRouter.post('/resetPassword', async (req, res) => {
     const { email } = req.body;
     const resultado = await db.get(`SELECT userAuthentication.password, users.email FROM users LEFT JOIN userAuthentication ON userAuthentication.userid = users.id WHERE email = $1`, [email]);
     console.log(resultado);
-    if (resultado === '' || resultado.password === null) {
-        res.send('IF!');
-    }
-    else {
-        res.status(400).send("else");
-    }
 });
 exports.usersRouter.post('/userAuthentication/', async (req, res) => {
     const db = await (0, index_1.connectDB)();
@@ -181,4 +175,32 @@ exports.usersRouter.post('/userAuthentication/', async (req, res) => {
         return res.status(500).json({ message: 'Erro interno do servidor' });
     }
 });
+//   usersRouter.post('/users2', async (req, res) => {
+//     try{
+//      const{name, email ,phone, gender, country} = req.body;
+//      if(!name || !email || !phone || !gender || !country){
+//          return res.status(400).json({message: 'Falta informações no formulário!'});
+//      }
+//      //Conectar com o banco de dados
+//      const db2 = await connect();
+//      // Inserir o usuário na base de dados
+//      const [result] = await db2.query(
+//          `INSERT INTO users (name, email, phone, gender, country) VALUES (?,?,?,?,?)`,
+//          [name, email, phone, gender, country]
+//      );
+//      const [user] = await db2.execute(`SELECT * FROM users WHERE id = ?`, result[0].lastID);
+//      // chamando o webhook
+//      await sendDiscordWebHook(user);
+//      await sendWelcomeEmail(user[0].email);
+//      // return the user data
+//      res.status(201).json({ message: 'Usuário criado com Sucesso', user:user });
+//    } catch (err) {
+//      console.error(err);
+//      if(err.code === 'ER_DUP_ENTRY'){
+//       res.status(400).json({message: 'Este endereço de email já está em uso'})
+//      }else{
+//       res.status(500).json({ message: 'Erro do servidor interno!' });
+//      }
+//     }
+//  });
 //# sourceMappingURL=users.js.map
