@@ -1,4 +1,5 @@
 import { createConnection } from 'mysql2/promise';
+import { createPool } from 'mysql2/promise';
 import dotenv from 'dotenv';
 dotenv.config()
 
@@ -11,7 +12,7 @@ console.log(dbhost, dbuser, dbpassword, dbdatabase);
 
 export async function connect(){
     try{
-        const connection =  await createConnection({
+        const pool =  await createPool({
             host: dbhost,
             user: dbuser,
             password: dbpassword,
@@ -60,13 +61,13 @@ export async function connect(){
    
 
 
-        await connection.query(users);
-        await connection.query(userAuthentication);
-        await connection.query(persons);
+        await pool.query(users);
+        await pool.query(userAuthentication);
+        await pool.query(persons);
         
 
         console.log( "Connected to database!");
-        return connection;
+        return pool;
 
     }catch(error){
         console.error("Error connecting to database!", error);
@@ -74,3 +75,6 @@ export async function connect(){
     }
 
 
+    export async function closeDB(db) {
+      await db.close();
+    }

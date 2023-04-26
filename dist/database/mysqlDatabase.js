@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connect = void 0;
+exports.closeDB = exports.connect = void 0;
 const promise_1 = require("mysql2/promise");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -14,7 +14,7 @@ const dbdatabase = process.env.DB_DATABASE;
 console.log(dbhost, dbuser, dbpassword, dbdatabase);
 async function connect() {
     try {
-        const connection = await (0, promise_1.createConnection)({
+        const pool = await (0, promise_1.createPool)({
             host: dbhost,
             user: dbuser,
             password: dbpassword,
@@ -56,15 +56,19 @@ async function connect() {
           FOREIGN KEY (userId) REFERENCES users(id)
         )
       `;
-        await connection.query(users);
-        await connection.query(userAuthentication);
-        await connection.query(persons);
+        await pool.query(users);
+        await pool.query(userAuthentication);
+        await pool.query(persons);
         console.log("Connected to database!");
-        return connection;
+        return pool;
     }
     catch (error) {
         console.error("Error connecting to database!", error);
     }
 }
 exports.connect = connect;
+async function closeDB(db) {
+    await db.close();
+}
+exports.closeDB = closeDB;
 //# sourceMappingURL=mysqlDatabase.js.map

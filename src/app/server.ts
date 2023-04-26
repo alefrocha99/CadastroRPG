@@ -1,7 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { usersRouter } from '../routes/users';
+import { usersRouter } from '../routes/users copy';
+import { personsRouter } from '../routes/persons';
+import { usersPassword } from '../routes/password'
 
 const corsOptions = {
   origin: 'http://127.0.0.1:5500'
@@ -18,11 +20,11 @@ app.get('/', (_, res) => {
 });
 
 app.use('/users', usersRouter);
-app.use('/:id/persons', usersRouter);
+app.use('/:id/persons', personsRouter);
 app.use('/clear', usersRouter);
-app.use('/users/:id/persons', usersRouter);
+app.use('/users/:id/persons', personsRouter);
 app.use('/userAuthentication/', usersRouter);
-app.use('/resetPassword',usersRouter);
+app.use('/resetPassword',usersPassword);
 app.use('/users2', usersRouter);
 
 
