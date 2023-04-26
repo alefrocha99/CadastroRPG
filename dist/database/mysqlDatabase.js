@@ -11,7 +11,6 @@ const dbhost = process.env.DB_HOST;
 const dbuser = process.env.DB_USER;
 const dbpassword = process.env.DB_PASSWORD;
 const dbdatabase = process.env.DB_DATABASE;
-console.log(dbhost, dbuser, dbpassword, dbdatabase);
 async function connect() {
     try {
         const pool = await (0, promise_1.createPool)({

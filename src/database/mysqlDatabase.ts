@@ -8,8 +8,6 @@ const dbuser = process.env.DB_USER;
 const dbpassword = process.env.DB_PASSWORD;
 const dbdatabase = process.env.DB_DATABASE;
 
-console.log(dbhost, dbuser, dbpassword, dbdatabase);
-
 export async function connect(){
     try{
         const pool =  await createPool({
