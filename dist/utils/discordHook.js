@@ -7,10 +7,11 @@ exports.sendDiscordWebHook = void 0;
 const axios_1 = __importDefault(require("axios"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const discordWebHook = process.env.DISCORD_WBHOOK;
+const discordWebHook1 = process.env.DISCORD_WBHOOK_1;
+const discordWebHook2 = process.env.DISCORD_WBHOOK_2;
 async function sendDiscordWebHook(user) {
     try {
-        await axios_1.default.post(`https://discord.com/api/webhooks/${discordWebHook}`, {
+        await axios_1.default.post(`https://discord.com/api/webhooks/${discordWebHook1}/${discordWebHook2}`, {
             content: JSON.stringify({ user })
         });
         console.log('Webhook enviado com sucesso!');
