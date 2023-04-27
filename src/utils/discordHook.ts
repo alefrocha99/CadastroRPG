@@ -6,7 +6,7 @@ const discordWebHook = process.env.DISCORD_WBHOOK;
 
 export async function sendDiscordWebHook(user){
     try{
-        await axios.post(`${discordWebHook}`, {
+        await axios.post(`https://discord.com/api/webhooks/${discordWebHook}`, {
             content: JSON.stringify({ user } )
         });
         console.log('Webhook enviado com sucesso!');

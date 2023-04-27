@@ -10,7 +10,7 @@ dotenv_1.default.config();
 const discordWebHook = process.env.DISCORD_WBHOOK;
 async function sendDiscordWebHook(user) {
     try {
-        await axios_1.default.post(`${discordWebHook}`, {
+        await axios_1.default.post(`https://discord.com/api/webhooks/${discordWebHook}`, {
             content: JSON.stringify({ user })
         });
         console.log('Webhook enviado com sucesso!');
