@@ -18,18 +18,19 @@ exports.usersRouter.use((req, res, next) => {
 // rota para criar usuários
 exports.usersRouter.post('/users2', async (req, res) => {
     try {
-        const { name, email, phone, gender, country } = req.body;
-        if (!name || !email || !phone || !gender || !country) {
+        const { name, email, phone, gender, country, origin } = req.body;
+        if (!name || !email || !phone || !gender || !country || !origin) {
             return res.status(400).json({ message: 'Falta informações no formulário!' });
         }
         //Conectar com o banco de dados
         const db2 = await (0, mysqlDatabase_1.connect)();
         // Inserir o usuário na base de dados
-        const [result] = await db2.query(`INSERT INTO users (name, email, phone, gender, country) VALUES (?,?,?,?,?)`, [name, email, phone, gender, country]);
+        const [result] = await db2.query(`INSERT INTO users (name, email, phone, gender, country, created_at, origin) VALUES (?,?,?,?,?,now(),?)`, [name, email, phone, gender, country, origin]);
         const { insertId } = result;
         const [user] = await db2.query(`SELECT * FROM users WHERE id = ?`, [insertId]);
         // chamando o webhook
         await (0, discordHook_1.sendDiscordWebHook)(user);
+        // chamando o envio de mensagem de boas vindas
         await (0, sendEmail_1.sendWelcomeEmail)(user[0].email);
         // return the user data
         res.status(201).json({ message: 'Usuário criado com Sucesso', user: user[0] });

@@ -21,9 +21,9 @@ usersRouter.use((req, res, next) => {
 // rota para criar usuários
 usersRouter.post('/users2', async (req, res) => {
   try{
-   const{name, email ,phone, gender, country} = req.body;
+   const{name, email ,phone, gender, country, origin} = req.body;
 
-   if(!name || !email || !phone || !gender || !country){
+   if(!name || !email || !phone || !gender || !country || !origin){
        return res.status(400).json({message: 'Falta informações no formulário!'});
    }
    
@@ -32,8 +32,8 @@ usersRouter.post('/users2', async (req, res) => {
 
    // Inserir o usuário na base de dados
    const [result] = await db2.query<OkPacket>(
-    `INSERT INTO users (name, email, phone, gender, country) VALUES (?,?,?,?,?)`,
-    [name, email, phone, gender, country]
+    `INSERT INTO users (name, email, phone, gender, country, created_at, origin) VALUES (?,?,?,?,?,now(),?)`,
+    [name, email, phone, gender, country, origin]
   );
 
   
@@ -43,7 +43,7 @@ usersRouter.post('/users2', async (req, res) => {
 
    // chamando o webhook
    await sendDiscordWebHook(user);
-  
+  // chamando o envio de mensagem de boas vindas
    await sendWelcomeEmail(user[0].email);
 
   

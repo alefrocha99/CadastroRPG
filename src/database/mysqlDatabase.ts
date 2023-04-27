@@ -24,6 +24,8 @@ export async function connect(){
         phone VARCHAR(30) NOT NULL,
         gender VARCHAR(50) NOT NULL,
         country VARCHAR(50) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        origin VARCHAR(50) NOT NULL,
         PRIMARY KEY (id)
         )
         `
