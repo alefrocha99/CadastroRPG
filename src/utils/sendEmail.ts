@@ -1,17 +1,23 @@
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+dotenv.config()
+
+const outlookPort = process.env.OUTLOOK_PORT;
+const outlookUser = process.env.OUTLOOK_USER
+const outlookPassword = process.env.OUTLOOK_PASSWORD
 
 export const sendWelcomeEmail = async (to: string) => {
   const transporter = nodemailer.createTransport({
     host: "smtp-mail.outlook.com",
-    port: 587,
+    port: outlookPort,
     auth: {
-      user: "cadastroRPGv3@outlook.com",
-      pass: "9d541529"
+      user: `${outlookUser}`,
+      pass: `${outlookPassword}`
     }
   });
 
   const mailOptions = {
-    from: 'cadastroRPGv3@outlook.com',
+    from: `${outlookPassword}`,
     to,
     subject: 'Bem-vindo(a) ao nosso site!',
     html: `<!DOCTYPE html>

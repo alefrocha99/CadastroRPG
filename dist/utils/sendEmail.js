@@ -5,17 +5,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendWelcomeEmail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const outlookPort = process.env.OUTLOOK_PORT;
+const outlookUser = process.env.OUTLOOK_USER;
+const outlookPassword = process.env.OUTLOOK_PASSWORD;
 const sendWelcomeEmail = async (to) => {
     const transporter = nodemailer_1.default.createTransport({
         host: "smtp-mail.outlook.com",
-        port: 587,
+        port: outlookPort,
         auth: {
-            user: "cadastroRPGv3@outlook.com",
-            pass: "9d541529"
+            user: `${outlookUser}`,
+            pass: `${outlookPassword}`
         }
     });
     const mailOptions = {
-        from: 'cadastroRPGv3@outlook.com',
+        from: `${outlookPassword}`,
         to,
         subject: 'Bem-vindo(a) ao nosso site!',
         html: `<!DOCTYPE html>

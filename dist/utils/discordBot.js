@@ -28,7 +28,7 @@ exports.client.on("message", async (message) => {
     if (command === "person") {
         const id = args[0]; // Extrai o ID após a palavra "Person:"
         try {
-            const response = await axios_1.default.get(`http://localhost:3000/users/${id}/persons`); // Faz uma requisição GET na API passando o ID como parâmetro
+            const response = await axios_1.default.get(`http://localhost:80/users/${id}/persons`); // Faz uma requisição GET na API passando o ID como parâmetro
             const persons = response.data; // Extrai a lista de personagens da resposta
             // Envia uma mensagem de resposta contendo a lista de personagens
             message.reply(`Aqui estão os personagens do usuário ${id}: \n${persons.map((p) => `${p.personName} (Classe: ${p.personClass})`).join('\n')}`);
@@ -40,7 +40,7 @@ exports.client.on("message", async (message) => {
     }
 });
 function startDiscordBot() {
-    exports.client.login('MTA4OTc3MzI5NzMzNzYzMDc3MA.GSaU5I.4RSl6YnZa3k12NHth6H3Wf56c-ae0DQVRWZy1g')
+    exports.client.login('MTA4OTc3MzI5NzMzNzYzMDc3MA.GJv1jV.dYdCD6JwHPA28yrh0neXA6HioEBG7uwOpjgyZk')
         .then(() => {
         console.log('Bot está online!');
     })
