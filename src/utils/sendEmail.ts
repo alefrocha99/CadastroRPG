@@ -8,12 +8,17 @@ const outlookPassword = process.env.OUTLOOK_PASSWORD
 
 export const sendWelcomeEmail = async (to: string) => {
   const transporter = nodemailer.createTransport({
-    host: "smtp-mail.outlook.com",
+    host: "smtps.uhserver.com",
     port: outlookPort,
     auth: {
       user: `${outlookUser}`,
       pass: `${outlookPassword}`
-    }
+    },
+    tls: {
+      rejectUnauthorized: true,
+      minVersion: "TLSv1.2"
+  }
+  
   });
 
   const mailOptions = {

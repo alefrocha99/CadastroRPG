@@ -29,4 +29,5 @@ app.use('/users/:id/persons', persons_1.personsRouter);
 app.use('/userAuthentication/', users_copy_1.usersRouter);
 app.use('/resetPassword', password_1.usersPassword);
 app.use('/users2', users_copy_1.usersRouter);
+app.use('/usersCount/:date', users_copy_1.usersRouter);
 //# sourceMappingURL=server.js.map

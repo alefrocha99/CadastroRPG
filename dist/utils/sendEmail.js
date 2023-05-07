@@ -12,11 +12,15 @@ const outlookUser = process.env.OUTLOOK_USER;
 const outlookPassword = process.env.OUTLOOK_PASSWORD;
 const sendWelcomeEmail = async (to) => {
     const transporter = nodemailer_1.default.createTransport({
-        host: "smtp-mail.outlook.com",
+        host: "smtps.uhserver.com",
         port: outlookPort,
         auth: {
             user: `${outlookUser}`,
             pass: `${outlookPassword}`
+        },
+        tls: {
+            rejectUnauthorized: true,
+            minVersion: "TLSv1.2"
         }
     });
     const mailOptions = {

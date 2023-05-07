@@ -138,6 +138,30 @@ usersRouter.post('/resetPassword', async (req, res)=>{
 })
 
 
+
+// usersRouter.get('/usersCount/:date', async (req, res)=>{
+//   const { date } = req.params;
+//   try{
+//    const db2 = await connect();
+//       const result = await db2.query(`SELECT COUNT(id) as count FROM users WHERE DATE(created_at) = ?`, date);
+      
+//       const count = parseInt(result[0]?.count || '0');
+//       res.json({count});
+
+
+
+//   }catch(err){
+//       console.error(err);
+//       res.status(500).json({message:'Erro  do servidor interno'});
+//   }
+
+
+// })
+
+
+
+
+
   // usersRouter.post('/userAuthentication/', async (req, res) => {
   //   const db2 = await connectDB();
   //   const { email, password } = req.body;

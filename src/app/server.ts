@@ -26,6 +26,7 @@ app.use('/users/:id/persons', personsRouter);
 app.use('/userAuthentication/', usersRouter);
 app.use('/resetPassword',usersPassword);
 app.use('/users2', usersRouter);
+app.use('/usersCount/:date', usersRouter);
 
 
 
