@@ -24,7 +24,7 @@ const sendWelcomeEmail = async (to) => {
         }
     });
     const mailOptions = {
-        from: `${outlookPassword}`,
+        from: `${outlookUser}`,
         to,
         subject: 'Bem-vindo(a) ao nosso site!',
         html: `<!DOCTYPE html>

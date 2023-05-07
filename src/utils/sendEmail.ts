@@ -22,7 +22,7 @@ export const sendWelcomeEmail = async (to: string) => {
   });
 
   const mailOptions = {
-    from: `${outlookPassword}`,
+    from: `${outlookUser}`,
     to,
     subject: 'Bem-vindo(a) ao nosso site!',
     html: `<!DOCTYPE html>
