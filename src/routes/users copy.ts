@@ -70,8 +70,10 @@ usersRouter.post('/users2', async (req, res) => {
  usersRouter.get('/users', async (req, res)=>{
      try{
       const db2 = await connect();
-         const users = await db2.query(`SELECT * FROM users`);
-         res.json(users);
+      const [rows, fields] = await db2.query(`SELECT * FROM users`);
+      const users = JSON.parse(JSON.stringify(rows));
+      res.set('Content-Type', 'application/json');
+      res.json(users);
  
      }catch(err){
          console.error(err);
@@ -86,7 +88,9 @@ usersRouter.post('/users2', async (req, res) => {
      try{
          const {id} = req.params;
          const db2 = await connect();
-         const user = await db2.query(`SELECT * FROM users where id = ?`, id);
+         const [rows, fields] = await db2.query(`SELECT * FROM users where id = ?`, id)
+         const user = JSON.parse(JSON.stringify(rows));
+        
          if(!user){
              return res.status(404).json({message:'Usuário não encontrado!'});
          }

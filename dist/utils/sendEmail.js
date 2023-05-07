@@ -26,7 +26,7 @@ const sendWelcomeEmail = async (to) => {
     const mailOptions = {
         from: `${outlookUser}`,
         to,
-        subject: 'Bem-vindo(a) ao nosso site!',
+        subject: 'Bem-vindo(a) ao QuestLog Brasil!',
         html: `<!DOCTYPE html>
     <html lang="pt-BR">
     <head>
